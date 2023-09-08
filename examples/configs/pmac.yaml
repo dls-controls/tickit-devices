@@ -1,0 +1,12 @@
+- tickit.devices.source.Source:
+    name: source
+    inputs: {}
+    value: 42.0
+- tickit_devices.pmac.PMAC:
+    name: pmac
+    inputs:
+      flux: source:value
+- tickit.devices.sink.Sink:
+    name: sink
+    inputs:
+      flux: pmac:flux
