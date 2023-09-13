@@ -27,7 +27,7 @@ class EigerStatus:
         default=State.NA,
         metadata=rw_state(allowed_values=[state.value for state in State]),
     )
-    errors: List[str] = field(default_factory=list, metadata=ro_str_list())
+    error: List[str] = field(default_factory=list, metadata=ro_str_list())
     th0_temp: float = field(default=24.5, metadata=rw_float())
     th0_humidity: float = field(default=0.2, metadata=rw_float())
     time: datetime = field(default=datetime.now(), metadata=rw_datetime())
