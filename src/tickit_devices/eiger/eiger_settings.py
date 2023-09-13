@@ -5,6 +5,7 @@ from typing import Any, List, Mapping
 
 from .eiger_schema import (
     ro_float,
+    ro_int,
     ro_str,
     rw_bool,
     rw_float,
@@ -116,9 +117,9 @@ class EigerSettings:
     two_theta_start: float = field(default=0.0, metadata=rw_float())
     wavelength: float = field(default=1.0, metadata=rw_float())
     x_pixel_size: float = field(default=0.01, metadata=ro_float())
-    x_pixels_in_detector: int = field(default=FRAME_WIDTH, metadata=rw_int())
+    x_pixels_in_detector: int = field(default=FRAME_WIDTH, metadata=ro_int())
     y_pixel_size: float = field(default=0.01, metadata=ro_float())
-    y_pixels_in_detector: int = field(default=FRAME_HEIGHT, metadata=rw_int())
+    y_pixels_in_detector: int = field(default=FRAME_HEIGHT, metadata=ro_int())
 
     def __getitem__(self, key: str) -> Any:  # noqa: D105
         f = {}
