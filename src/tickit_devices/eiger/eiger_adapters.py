@@ -430,5 +430,5 @@ class EigerZMQAdapter(ZeroMqPushAdapter):
 
     def after_update(self) -> None:
         """Updates IOC values immediately following a device update."""
-        if buffered_data := list(self.device.stream.consume_data()):
+        if buffered_data := list(self.stream.consume_data()):
             self.add_message_to_stream(buffered_data)
