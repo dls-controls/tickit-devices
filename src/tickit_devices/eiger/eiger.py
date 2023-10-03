@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from queue import Queue
-from typing import Optional
+from typing import Mapping, Optional
 
 from tickit.core.device import Device, DeviceUpdate
 from tickit.core.typedefs import SimTime
@@ -14,6 +14,13 @@ from tickit_devices.eiger.filewriter.filewriter_status import FileWriterStatus
 from tickit_devices.eiger.monitor.monitor_config import MonitorConfig
 from tickit_devices.eiger.monitor.monitor_status import MonitorStatus
 from tickit_devices.eiger.stream.eiger_stream import EigerStream
+from tickit_devices.eiger.stream.eiger_stream_2 import EigerStream2
+from tickit_devices.eiger.stream.stream_config import (
+    CBOR_STREAM,
+    LEGACY_STREAM,
+    StreamConfig,
+)
+from tickit_devices.eiger.stream.stream_status import StreamStatus
 
 from .eiger_status import EigerStatus, State
 
@@ -36,7 +43,8 @@ class EigerDevice(Device):
 
     settings: EigerSettings
     status: EigerStatus
-    stream: EigerStream
+    stream: EigerStream | EigerStream2
+    streams: Mapping[str, EigerStream | EigerStream2]
 
     _num_frames_left: int
     _data_queue: Queue
@@ -51,7 +59,7 @@ class EigerDevice(Device):
         self,
         settings: Optional[EigerSettings] = None,
         status: Optional[EigerStatus] = None,
-        stream: Optional[EigerStream] = None,
+        stream: Optional[EigerStream | EigerStream2] = None,
     ) -> None:
         """Construct a new eiger.
 
@@ -63,7 +71,13 @@ class EigerDevice(Device):
         self.settings = settings or EigerSettings()
         self.status = status or EigerStatus()
 
-        self.stream = stream or EigerStream(callback_period=SimTime(int(1e9)))
+        self.stream_status: StreamStatus = StreamStatus()
+        self.stream_config: StreamConfig = StreamConfig()
+        self.streams = {
+            LEGACY_STREAM: stream or EigerStream(callback_period=SimTime(int(1e9))),
+            CBOR_STREAM: stream or EigerStream2(callback_period=SimTime(int(1e9))),
+        }
+        self.stream = self.streams[CBOR_STREAM]
 
         self.filewriter_status: FileWriterStatus = FileWriterStatus()
         self.filewriter_config: FileWriterConfig = FileWriterConfig()
@@ -103,8 +117,11 @@ class EigerDevice(Device):
 
         Required for triggering.
         """
+        self.stream = self.streams[self.stream_config.format]
         self._series_id += 1
-        self.stream.begin_series(self.settings, self._series_id)
+        self.stream.begin_series(
+            self.settings, self._series_id, self.stream_config.header_detail
+        )
         self._num_frames_left = self.settings.nimages
         self._set_state(State.READY)
 
