@@ -113,7 +113,7 @@ async def test_armed_eiger_starts_series(eiger: EigerDevice, mock_stream: Mock):
     await eiger.initialize()
     eiger.settings.trigger_mode = "ints"
     await eiger.arm()
-    mock_stream.begin_series.assert_called_once_with(eiger.settings, 1)
+    mock_stream.begin_series.assert_called_once_with(eiger.settings, 1, "basic")
 
 
 @pytest.mark.asyncio
@@ -124,7 +124,7 @@ async def test_disarmed_eiger_starts_and_ends_series(
     eiger.settings.trigger_mode = "ints"
     await eiger.arm()
     await eiger.disarm()
-    mock_stream.begin_series.assert_called_once_with(eiger.settings, 1)
+    mock_stream.begin_series.assert_called_once_with(eiger.settings, 1, "basic")
     mock_stream.end_series.assert_called_once_with(1)
 
 
@@ -136,7 +136,7 @@ async def test_cancelled_eiger_starts_and_ends_series(
     eiger.settings.trigger_mode = "ints"
     await eiger.arm()
     await eiger.cancel()
-    mock_stream.begin_series.assert_called_once_with(eiger.settings, 1)
+    mock_stream.begin_series.assert_called_once_with(eiger.settings, 1, "basic")
     mock_stream.end_series.assert_called_once_with(1)
 
 
@@ -165,7 +165,7 @@ async def test_acquire_frames_in_ints_mode(
         update = eiger.update(SimTime(0.0), {})
         assert update.call_at is None
 
-        mock_stream.begin_series.assert_called_with(eiger.settings, series)
+        mock_stream.begin_series.assert_called_with(eiger.settings, series, "basic")
         assert mock_stream.begin_series.call_count == series
         if num_frames > 0:
             mock_stream.insert_image.assert_called_with(ANY, series)
@@ -204,7 +204,7 @@ async def test_acquire_frames_in_exts_mode(
         update = eiger.update(SimTime(0.0), {})
         assert update.call_at is None
 
-        mock_stream.begin_series.assert_called_with(eiger.settings, series)
+        mock_stream.begin_series.assert_called_with(eiger.settings, series, "basic")
         assert mock_stream.begin_series.call_count == series
         if num_frames > 0:
             mock_stream.insert_image.assert_called_with(ANY, series)

@@ -69,6 +69,9 @@ class EigerSettings:
     compression: str = field(
         default="bslz4", metadata=rw_str(allowed_values=["bslz4", "lz4"])
     )
+    counting_mode: str = field(
+        default="normal", metadata=rw_str(allowed_values=["normal", "retrigger"])
+    )
     count_time: float = field(default=0.1, metadata=rw_float())
     countrate_correction_applied: bool = field(default=True, metadata=rw_bool())
     countrate_correction_count_cutoff: int = field(default=1000, metadata=rw_int())
@@ -113,6 +116,7 @@ class EigerSettings:
     trigger_mode: str = field(
         default="exts", metadata=rw_str(allowed_values=["exts", "ints", "exte", "inte"])
     )
+    trigger_start_delay: float = field(default=0.0, metadata=rw_float(min=0.0))
     two_theta_increment: float = field(default=0.0, metadata=rw_float())
     two_theta_start: float = field(default=0.0, metadata=rw_float())
     wavelength: float = field(default=1.0, metadata=rw_float())

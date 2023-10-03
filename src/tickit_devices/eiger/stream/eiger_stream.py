@@ -16,8 +16,6 @@ from tickit_devices.eiger.data.schema import (
     ImageHeader,
 )
 from tickit_devices.eiger.eiger_settings import EigerSettings
-from tickit_devices.eiger.stream.stream_config import StreamConfig
-from tickit_devices.eiger.stream.stream_status import StreamStatus
 
 LOGGER = logging.getLogger(__name__)
 
@@ -28,8 +26,6 @@ _Message = Union[BaseModel, Mapping[str, Any], bytes]
 class EigerStream:
     """Simulation of an Eiger stream."""
 
-    status: StreamStatus
-    config: StreamConfig
     callback_period: SimTime
 
     _message_buffer: Queue[_Message]
@@ -42,21 +38,21 @@ class EigerStream:
 
     def __init__(self, callback_period: int = int(1e9)) -> None:
         """An Eiger Stream constructor."""
-        self.status = StreamStatus()
-        self.config = StreamConfig()
         self.callback_period = SimTime(callback_period)
 
         self._message_buffer = Queue()
 
-    def begin_series(self, settings: EigerSettings, series_id: int) -> None:
+    def begin_series(
+        self, settings: EigerSettings, series_id: int, header_detail: str
+    ) -> None:
         """Send the headers marking the beginning of the acquisition series.
 
         Args:
             settings: Current detector configuration, a snapshot may be sent with the
                 headers.
             series_id: ID for the acquisition series.
+            header_detail: Header detail for start message - "none", "basic" or "all"
         """
-        header_detail = self.config.header_detail
         header = AcquisitionSeriesHeader(
             header_detail=header_detail,
             series=series_id,

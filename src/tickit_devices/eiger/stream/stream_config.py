@@ -3,6 +3,9 @@ from typing import Any
 
 from tickit_devices.eiger.eiger_schema import rw_str
 
+LEGACY_STREAM = "legacy"
+CBOR_STREAM = "cbor"
+
 
 @dataclass
 class StreamConfig:
@@ -10,6 +13,10 @@ class StreamConfig:
 
     mode: str = field(
         default="enabled", metadata=rw_str(allowed_values=["disabled", "enabled"])
+    )
+    format: str = field(
+        default=LEGACY_STREAM,
+        metadata=rw_str(allowed_values=[LEGACY_STREAM, CBOR_STREAM]),
     )
     header_detail: str = field(
         default="basic", metadata=rw_str(allowed_values=["none", "basic", "all"])
