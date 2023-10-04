@@ -1,3 +1,5 @@
+import logging
+
 import pydantic.v1.dataclasses
 from tickit.adapters.io import HttpIo, ZeroMqPushIo
 from tickit.core.adapter import AdapterContainer
@@ -20,6 +22,7 @@ class Eiger(ComponentConfig):
     stream_cbor_port: int = 31001
 
     def __call__(self) -> Component:  # noqa: D102
+        logging.getLogger("aiohttp.access").setLevel(logging.WARNING)
         device = EigerDevice()
         adapters = [
             AdapterContainer(
