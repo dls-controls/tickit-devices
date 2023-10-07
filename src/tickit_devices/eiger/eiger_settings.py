@@ -24,34 +24,34 @@ FRAME_HEIGHT: int = 4362
 class KA_Energy(Enum):
     """Possible element K-alpha energies for samples."""
 
-    Li: float = 54.3
-    Be: float = 108.5
-    B: float = 183.3
-    C: float = 277.0
-    N: float = 392.4
-    O: float = 524.9
-    F: float = 676.8
-    Ne: float = 848.6
-    Na: float = 1040.98
-    Mg: float = 1253.6
-    Al: float = 1486.7
-    Si: float = 1739.98
-    P: float = 2013.7
-    S: float = 2307.84
-    Cl: float = 2622.39
-    Ar: float = 2957.7
-    K: float = 3313.8
-    Ca: float = 3691.68
-    Sc: float = 4090.6
-    Ti: float = 4510.84
-    V: float = 4952.2
-    Cr: float = 5414.72
-    Mn: float = 5898.75
-    Fe: float = 6403.84
-    Co: float = 6930.32
-    Ni: float = 7478.15
-    Cu: float = 8047.78
-    Zn: float = 8638.86
+    Li = 54.3
+    Be = 108.5
+    B = 183.3
+    C = 277.0
+    N = 392.4
+    O = 524.9  # noqa: E741 'O is ambiguous'
+    F = 676.8
+    Ne = 848.6
+    Na = 1040.98
+    Mg = 1253.6
+    Al = 1486.7
+    Si = 1739.98
+    P = 2013.7
+    S = 2307.84
+    Cl = 2622.39
+    Ar = 2957.7
+    K = 3313.8
+    Ca = 3691.68
+    Sc = 4090.6
+    Ti = 4510.84
+    V = 4952.2
+    Cr = 5414.72
+    Mn = 5898.75
+    Fe = 6403.84
+    Co = 6930.32
+    Ni = 7478.15
+    Cu = 8047.78
+    Zn = 8638.86
 
 
 @dataclass

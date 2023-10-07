@@ -32,26 +32,26 @@ def field_config(**kwargs) -> Mapping[str, Any]:
 class AccessMode(Enum):
     """Possible access modes for field metadata."""
 
-    READ_ONLY: str = "r"
-    WRITE_ONLY: str = "w"
-    READ_WRITE: str = "rw"
+    READ_ONLY = "r"
+    WRITE_ONLY = "w"
+    READ_WRITE = "rw"
 
 
 class ValueType(Enum):
     """Possible value types for field metadata."""
 
-    FLOAT: str = "float"
-    INT: str = "int"
-    UINT: str = "uint"
-    STRING: str = "string"
-    STR_LIST: str = "string[]"
-    BOOL: str = "bool"
-    FLOAT_GRID: str = "float[][]"
-    UINT_GRID: str = "uint[][]"
-    DATE: str = "date"
-    DATETIME: str = "datetime"
-    NONE: str = "none"
-    STATE: str = "State"
+    FLOAT = "float"
+    INT = "int"
+    UINT = "uint"
+    STRING = "string"
+    STR_LIST = "string[]"
+    BOOL = "bool"
+    FLOAT_GRID = "float[][]"
+    UINT_GRID = "uint[][]"
+    DATE = "date"
+    DATETIME = "datetime"
+    NONE = "none"
+    STATE = "State"
 
 
 #
