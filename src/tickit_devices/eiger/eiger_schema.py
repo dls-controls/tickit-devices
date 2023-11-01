@@ -81,6 +81,9 @@ ro_str: partial = partial(
 rw_bool: partial = partial(
     field_config, value_type=ValueType.BOOL, access_mode=AccessMode.READ_WRITE
 )
+ro_bool: partial = partial(
+    field_config, value_type=ValueType.BOOL, access_mode=AccessMode.READ_ONLY
+)
 rw_float_grid: partial = partial(
     field_config,
     value_type=ValueType.FLOAT_GRID,
@@ -94,8 +97,11 @@ rw_uint_grid: partial = partial(
 ro_date: partial = partial(
     field_config, value_type=ValueType.DATE, access_mode=AccessMode.READ_ONLY
 )
-rw_datetime: partial = partial(
-    field_config, value_type=ValueType.DATETIME, access_mode=AccessMode.READ_WRITE
+ro_datetime: partial = partial(
+    field_config, value_type=ValueType.DATETIME, access_mode=AccessMode.READ_ONLY
+)
+ro_state: partial = partial(
+    field_config, value_type=ValueType.STATE, access_mode=AccessMode.READ_ONLY
 )
 rw_state: partial = partial(
     field_config, value_type=ValueType.STATE, access_mode=AccessMode.READ_WRITE

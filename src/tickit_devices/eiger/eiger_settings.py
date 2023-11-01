@@ -7,6 +7,7 @@ from .eiger_schema import (
     ro_float,
     ro_int,
     ro_str,
+    ro_str_list,
     rw_bool,
     rw_float,
     rw_float_grid,
@@ -20,6 +21,59 @@ LOGGER = logging.getLogger(__name__)
 
 FRAME_WIDTH: int = 4148
 FRAME_HEIGHT: int = 4362
+
+
+def config_keys() -> list[str]:
+    return [
+        "auto_summation",
+        "beam_center_x",
+        "beam_center_y",
+        "bit_depth_image",
+        "bit_depth_readout",
+        "chi_increment",
+        "chi_start",
+        "compression",
+        "count_time",
+        "counting_mode",
+        "countrate_correction_applied",
+        "countrate_correction_count_cutoff",
+        "data_collection_date",
+        "description",
+        "detector_distance",
+        "detector_number",
+        "detector_readout_time",
+        "eiger_fw_version",
+        "element",
+        "flatfield_correction_applied",
+        "frame_count_time",
+        "frame_time",
+        "kappa_increment",
+        "kappa_start",
+        "nimages",
+        "ntrigger",
+        "number_of_excluded_pixels",
+        "omega_increment",
+        "omega_start",
+        "phi_increment",
+        "phi_start",
+        "photon_energy",
+        "pixel_mask_applied",
+        "roi_mode",
+        "sensor_material",
+        "sensor_thickness",
+        "software_version",
+        "threshold_energy",
+        "trigger_mode",
+        "trigger_start_delay",
+        "two_theta_increment",
+        "two_theta_start",
+        "virtual_pixel_correction_applied",
+        "wavelength",
+        "x_pixel_size",
+        "x_pixels_in_detector",
+        "y_pixel_size",
+        "y_pixels_in_detector",
+    ]
 
 
 class KA_Energy(Enum):
@@ -73,6 +127,10 @@ class EigerSettings:
         default="normal", metadata=rw_str(allowed_values=["normal", "retrigger"])
     )
     count_time: float = field(default=0.1, metadata=rw_float())
+    counting_mode: str = field(
+        default="normal",
+        metadata=rw_str(allowed_values=["normal", "retrigger"]),
+    )
     countrate_correction_applied: bool = field(default=True, metadata=rw_bool())
     countrate_correction_count_cutoff: int = field(default=1000, metadata=rw_int())
     data_collection_date: str = field(
@@ -84,6 +142,7 @@ class EigerSettings:
     detector_distance: float = field(default=2.0, metadata=rw_float())
     detector_number: str = field(default="EIGERSIM001", metadata=ro_str())
     detector_readout_time: float = field(default=0.01, metadata=rw_float())
+    eiger_fw_version: str = field(default="1.8.0", metadata=ro_str())
     element: str = field(
         default="Co", metadata=rw_str(allowed_values=["", *(e.name for e in KA_Energy)])
     )
@@ -91,6 +150,7 @@ class EigerSettings:
         default_factory=lambda: [[]], metadata=rw_float_grid()
     )
     flatfield_correction_applied: bool = field(default=True, metadata=rw_bool())
+    frame_count_time: float = field(default=0.01, metadata=ro_float())
     frame_time: float = field(default=0.12, metadata=rw_float())
     kappa_increment: float = field(default=0.0, metadata=rw_float())
     kappa_start: float = field(default=0.0, metadata=rw_float())
@@ -119,11 +179,14 @@ class EigerSettings:
     trigger_start_delay: float = field(default=0.0, metadata=rw_float(min=0.0))
     two_theta_increment: float = field(default=0.0, metadata=rw_float())
     two_theta_start: float = field(default=0.0, metadata=rw_float())
+    virtual_pixel_correction_applied: bool = field(default=True, metadata=rw_bool())
     wavelength: float = field(default=1.0, metadata=rw_float())
     x_pixel_size: float = field(default=0.01, metadata=ro_float())
     x_pixels_in_detector: int = field(default=FRAME_WIDTH, metadata=ro_int())
     y_pixel_size: float = field(default=0.01, metadata=ro_float())
     y_pixels_in_detector: int = field(default=FRAME_HEIGHT, metadata=ro_int())
+
+    keys: List[str] = field(default_factory=config_keys, metadata=ro_str_list())
 
     def __getitem__(self, key: str) -> Any:  # noqa: D105
         f = {}
