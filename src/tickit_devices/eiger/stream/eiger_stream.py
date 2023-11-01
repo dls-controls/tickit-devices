@@ -14,13 +14,14 @@ from tickit_devices.eiger.data.schema import (
     ImageCharacteristicsHeader,
     ImageConfigHeader,
     ImageHeader,
-)
+) 
 from tickit_devices.eiger.eiger_settings import EigerSettings
 
 LOGGER = logging.getLogger(__name__)
 
 
 _Message = Union[BaseModel, Mapping[str, Any], bytes]
+
 
 
 class EigerStream:
