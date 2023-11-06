@@ -156,7 +156,7 @@ class EigerSettings:
     kappa_start: float = field(default=0.0, metadata=rw_float())
     nimages: int = field(default=1, metadata=rw_int())
     ntrigger: int = field(default=1, metadata=rw_int())
-    number_of_excuded_pixels: int = field(default=0, metadata=rw_int())
+    number_of_excluded_pixels: int = field(default=0, metadata=rw_int())
     omega_increment: float = field(default=0.0, metadata=rw_float())
     omega_start: float = field(default=0.0, metadata=rw_float())
     phi_increment: float = field(default=0.0, metadata=rw_float())
