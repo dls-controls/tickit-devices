@@ -150,6 +150,9 @@ class EigerDevice(Device):
 
         The detector will immediately stop acquiring frames and disarm itself.
         """
+        self._abort()
+
+    def _abort(self) -> None:
         self._set_state(State.IDLE)
         self.stream.end_series(self._series_id)
 
@@ -176,7 +179,9 @@ class EigerDevice(Device):
                 LOGGER.debug("Ending Series...")
                 self._set_state(State.IDLE)
                 self.stream.end_series(self._series_id)
-        if inputs.get("trigger", False):
+        
+        trigger_high = inputs.get("trigger", False)
+        if trigger_high and self.settings.trigger_mode == "exts" and self._is_in_state(State.READY):
             self._begin_acqusition_mode()
             # Should have another update immediately to begin acquisition
             return DeviceUpdate(self.Outputs(), SimTime(time))

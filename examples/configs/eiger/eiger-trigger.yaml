@@ -1,0 +1,9 @@
+- type: tickit.devices.signal_generator.EpicsSignalGenerator
+  name: gen
+  inputs: {}
+- type: tickit_devices.eiger.Eiger
+  inputs:
+    trigger:
+      component: gen
+      port: gate
+  name: eiger

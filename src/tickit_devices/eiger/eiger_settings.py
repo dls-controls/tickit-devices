@@ -112,6 +112,9 @@ class EigerSettings:
     trigger_mode: str = field(
         default="exts", metadata=rw_str(allowed_values=["exts", "ints", "exte", "inte"])
     )
+    trigger_start_delay: float = field(
+        default=0.0, metadata=rw_float()
+    )
     two_theta_increment: float = field(default=0.0, metadata=rw_float())
     two_theta_start: float = field(default=0.0, metadata=rw_float())
     wavelength: float = field(default=1.0, metadata=rw_float())
