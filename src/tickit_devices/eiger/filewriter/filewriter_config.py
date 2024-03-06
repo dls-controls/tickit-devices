@@ -17,13 +17,10 @@ class FileWriterConfig:
     compression_enabled: bool = field(default=False, metadata=rw_bool())
 
     def __getitem__(self, key: str) -> Any:  # noqa: D105
-        f = {}
         for field_ in fields(self):
-            f[field_.name] = {
-                "value": vars(self)[field_.name],
-                "metadata": field_.metadata,
-            }
-        return f[key]
+            if field_.name == key:
+                return {"value": vars(self)[field_.name], "metadata": field_.metadata}
+        raise ValueError(f"No field with name {key}")
 
     def __setitem__(self, key: str, value: Any) -> None:  # noqa: D105
         self.__dict__[key] = value

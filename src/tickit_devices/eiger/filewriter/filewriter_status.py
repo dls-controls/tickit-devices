@@ -13,10 +13,7 @@ class FileWriterStatus:
     files: List[str] = field(default_factory=lambda: [], metadata=ro_str_list())
 
     def __getitem__(self, key: str) -> Any:  # noqa: D105
-        f = {}
         for field_ in fields(self):
-            f[field_.name] = {
-                "value": vars(self)[field_.name],
-                "metadata": field_.metadata,
-            }
-        return f[key]
+            if field_.name == key:
+                return {"value": vars(self)[field_.name], "metadata": field_.metadata}
+        raise ValueError(f"No field with name {key}")
