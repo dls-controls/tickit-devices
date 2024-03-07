@@ -36,7 +36,7 @@ class EigerStatus:
     """Stores the status parameters of the Eiger detector."""
 
     state: State = field(
-        default=State.IDLE,
+        default=State.NA,
         metadata=ro_state(allowed_values=[state.value for state in State]),
     )
     error: List[str] = field(default_factory=list, metadata=ro_str_list())

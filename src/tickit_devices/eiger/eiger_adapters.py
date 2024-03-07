@@ -114,7 +114,13 @@ class EigerRESTAdapter(HttpAdapter):
             web.Response: The response object returned given the result of the HTTP
                 request.
         """
-        return await self.get_status(request)
+        if "th0_temp" in request.message.path:
+            data = construct_value(self.device.status, "temperature")
+            return web.json_response(data)
+        elif "th0_humidity" in request.message.path:
+            data = construct_value(self.device.status, "humidity")
+            return web.json_response(data)
+        return web.json_response(status=404)
 
     @HttpEndpoint.get(f"/{DETECTOR_API}" + "/status/builder/{status_param}")
     async def get_builder_status(self, request: web.Request) -> web.Response:
