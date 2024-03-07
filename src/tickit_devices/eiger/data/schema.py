@@ -64,10 +64,10 @@ class ImageCharacteristicsHeader(BaseModel):
 class ImageConfigHeader(BaseModel):
     """Sent before a detector image blob.
 
-    Describes the metrics on the image acquisition.
+    Describes the metrics on the image acquisition. Time values are ints given in ns.
     """
 
-    real_time: float
-    start_time: float
-    stop_time: float
+    real_time: int
+    start_time: int
+    stop_time: int
     htype: str = "dconfig-1.0"

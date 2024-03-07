@@ -10,7 +10,7 @@ def test_after_update(mocker: MockerFixture) -> None:
     device_mock = mocker.MagicMock()
     device_mock.stream.consume_data.side_effect = [test_data, []]
 
-    zmq_adapter = EigerZMQAdapter(device_mock)
+    zmq_adapter = EigerZMQAdapter(device_mock.stream)
     add_mock = mocker.patch.object(zmq_adapter, "add_message_to_stream")
 
     # Test after_update only calls add_message_to_stream with non-empty data

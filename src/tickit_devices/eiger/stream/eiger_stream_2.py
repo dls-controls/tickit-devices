@@ -3,6 +3,7 @@ from pathlib import Path
 from queue import Queue
 from typing import Any, Dict, Iterable, Mapping, TypedDict, Union
 
+import base64
 import cbor2
 import numpy as np
 from pydantic.v1 import BaseModel
@@ -53,9 +54,13 @@ def _load_messages():
 
     # Populate missing large datasets
     sensor_shape = (start["image_size_y"], start["image_size_x"])
-    start["countrate_correction_lookup_table"] = np.zeros((65536,)).tobytes()
-    start["flatfield"]["threshold_1"] = np.zeros(sensor_shape).tobytes()
-    start["pixel_mask"]["threshold_1"] = np.zeros(sensor_shape).tobytes()
+    start["countrate_correction_lookup_table"] = base64.b64encode(
+        np.zeros((65536,), np.uint8).tobytes()
+    )
+    start["flatfield"]["threshold_1"] = base64.b64encode(
+        np.zeros(sensor_shape, np.uint8).tobytes()
+    )
+    start["pixel_mask"]["threshold_1"] = start["flatfield"]["threshold_1"]  # copy value
 
     with open(DATA_PATH / "image.cbor", "rb") as f:
         image = cbor2.load(f)
@@ -113,11 +118,17 @@ class EigerStream2:
         # Update message with current state
         start["number_of_images"] = settings.nimages * settings.ntrigger
         for stream_field, setting in STREAM_SETTINGS_MAP.items():
-            start[stream_field] = getattr(settings, setting)
-        for axis in GONIO_AXES:
-            axis_fields: Dict[str, float] = start["goniometer"][axis]
-            axis_fields["start"] = float(getattr(settings, f"{axis}_start"))
-            axis_fields["increment"] = float(getattr(settings, f"{axis}_increment"))
+            if stream_field not in start:
+                start[stream_field] = getattr(settings, setting)
+        for axis in [a for a in GONIO_AXES if a not in start["goniometer"]]:
+            #  get default values for axes not in start message
+            start["goniometer"][axis] = {}
+            start["goniometer"][axis]["start"] = float(
+                getattr(settings, f"{axis}_start")
+            )
+            start["goniometer"][axis]["increment"] = float(
+                getattr(settings, f"{axis}_increment")
+            )
 
         start["series_id"] = series_id
 
