@@ -11,6 +11,7 @@ from tickit_devices.eiger.eiger_schema import SequenceComplete, Value, construct
 from tickit_devices.eiger.eiger_status import State
 from tickit_devices.eiger.stream.eiger_stream import EigerStream
 from tickit_devices.eiger.stream.eiger_stream_2 import EigerStream2
+from typing import Union
 
 API_VERSION = "1.8.0"
 DETECTOR_API = f"detector/api/{API_VERSION}"
@@ -439,7 +440,7 @@ class EigerZMQAdapter(ZeroMqPushAdapter):
 
     device: EigerDevice
 
-    def __init__(self, stream: EigerStream | EigerStream2) -> None:
+    def __init__(self, stream: Union[EigerStream, EigerStream2]) -> None:
         super().__init__()
         self.stream = stream
 

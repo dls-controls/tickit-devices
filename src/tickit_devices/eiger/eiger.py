@@ -21,7 +21,7 @@ from tickit_devices.eiger.stream.stream_config import (
     StreamConfig,
 )
 from tickit_devices.eiger.stream.stream_status import StreamStatus
-
+from typing import Union
 from .eiger_status import EigerStatus, State
 
 LOGGER = logging.getLogger("Eiger")
@@ -43,8 +43,8 @@ class EigerDevice(Device):
 
     settings: EigerSettings
     status: EigerStatus
-    stream: EigerStream | EigerStream2
-    streams: Mapping[str, EigerStream | EigerStream2]
+    stream: Union[EigerStream, EigerStream2]
+    streams: Mapping[str, Union[EigerStream, EigerStream2]]
 
     _num_frames_left: int
     _data_queue: Queue
@@ -59,7 +59,7 @@ class EigerDevice(Device):
         self,
         settings: Optional[EigerSettings] = None,
         status: Optional[EigerStatus] = None,
-        stream: Optional[EigerStream | EigerStream2] = None,
+        stream: Optional[Union[EigerStream, EigerStream2]] = None,
     ) -> None:
         """Construct a new eiger.
 
