@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from queue import Queue
-from typing import Mapping, Optional
+from typing import Mapping, Optional, Union
 
 from tickit.core.device import Device, DeviceUpdate
 from tickit.core.typedefs import SimTime
@@ -21,7 +21,7 @@ from tickit_devices.eiger.stream.stream_config import (
     StreamConfig,
 )
 from tickit_devices.eiger.stream.stream_status import StreamStatus
-from typing import Union
+
 from .eiger_status import EigerStatus, State
 
 LOGGER = logging.getLogger("Eiger")
@@ -53,7 +53,7 @@ class EigerDevice(Device):
         trigger: bool
 
     class Outputs(TypedDict):
-        ...
+        """No outputs."""
 
     def __init__(
         self,

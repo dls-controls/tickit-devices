@@ -1,5 +1,3 @@
-from time import sleep
-
 import cbor2
 
 # from dectris.compression import decompress
@@ -74,7 +72,6 @@ def stream2_tag_decoder(_decoder, tag):
 if __name__ == "__main__":
     import sys
     from pathlib import Path
-    from pprint import pprint
 
     import zmq
 
@@ -84,7 +81,7 @@ if __name__ == "__main__":
     socket_count = int(sys.argv[2])
     context = zmq.Context()
     context.setsockopt(zmq.IO_THREADS, socket_count)
-    print(f"IO Threads: {context.getsockopt(zmq.IO_THREADS)}")
+    # print(f"IO Threads: {context.getsockopt(zmq.IO_THREADS)}")
     endpoint = f"tcp://{sys.argv[1]}:31001"
 
     sockets = []

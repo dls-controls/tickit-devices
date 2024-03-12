@@ -5,12 +5,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, List
 
-from .eiger_schema import (
-    ro_datetime,
-    ro_float,
-    ro_state,
-    ro_str_list,
-)
+from .eiger_schema import ro_datetime, ro_float, ro_state, ro_str_list
 
 
 class State(Enum):

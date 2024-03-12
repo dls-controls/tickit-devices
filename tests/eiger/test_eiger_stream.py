@@ -137,8 +137,8 @@ def expected_image_blobs(image: Image) -> List[Union[bytes, BaseModel]]:
         ),
         image.data,
         ImageConfigHeader(
-            real_time=0.0,
-            start_time=0.0,
-            stop_time=0.0,
+            real_time=0,
+            start_time=0,
+            stop_time=0,
         ),
     ]

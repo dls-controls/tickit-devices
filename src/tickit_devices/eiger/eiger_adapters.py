@@ -1,4 +1,5 @@
 import logging
+from typing import Union
 
 from aiohttp import web
 from apischema import serialize
@@ -7,11 +8,10 @@ from tickit.adapters.specifications import HttpEndpoint
 from tickit.adapters.zmq import ZeroMqPushAdapter
 
 from tickit_devices.eiger.eiger import EigerDevice
-from tickit_devices.eiger.eiger_schema import SequenceComplete, Value, construct_value
+from tickit_devices.eiger.eiger_schema import SequenceComplete, construct_value
 from tickit_devices.eiger.eiger_status import State
 from tickit_devices.eiger.stream.eiger_stream import EigerStream
 from tickit_devices.eiger.stream.eiger_stream_2 import EigerStream2
-from typing import Union
 
 API_VERSION = "1.8.0"
 DETECTOR_API = f"detector/api/{API_VERSION}"

@@ -7,6 +7,7 @@ from tickit_devices.eiger.eiger_schema import ro_str_list, rw_state, rw_str
 def stream_config_keys() -> list[str]:
     return ["header_appendix", "header_detail", "image_appendix", "mode"]
 
+
 LEGACY_STREAM = "legacy"
 CBOR_STREAM = "cbor"
 

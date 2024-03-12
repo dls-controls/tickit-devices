@@ -1,4 +1,5 @@
 import datetime
+from typing import Any, Dict, List
 
 import cbor2
 import pytest
@@ -6,8 +7,7 @@ import pytest
 from tickit_devices.eiger.data.dummy_image import Image
 from tickit_devices.eiger.eiger import EigerDevice
 from tickit_devices.eiger.eiger_settings import EigerSettings
-from tickit_devices.eiger.stream.eiger_stream_2 import EigerStream2, STREAM_SETTINGS_MAP
-import json
+from tickit_devices.eiger.stream.eiger_stream_2 import EigerStream2
 
 
 @pytest.fixture
@@ -30,7 +30,7 @@ Y_SIZE = EIGER_SETTINGS_HEADER["y_pixels_in_detector"]
 
 ALL_FIELDS = ["flatfield", "pixel_mask", "countrate_correction_lookup_table"]
 
-BASIC_START_MESSAGE = {
+BASIC_START_MESSAGE: Dict[str, Any] = {
     "type": "start",
     "series_id": 15614,
     "series_unique_id": "01HBV3JPF9T4ZDPADX6EMK6XMZ",
@@ -48,7 +48,7 @@ BASIC_START_MESSAGE = {
     "beam_center_y": 2163.621048575148,
     "channels": ["threshold_1"],
     "count_time": 0.004317472232502031,
-    "countrate_correction_lookup_table": b'\x00\x00\x00\x00',
+    "countrate_correction_lookup_table": b"\x00\x00\x00\x00",
     "countrate_correction_enabled": True,
     "detector_description": "Dectris EIGER2 Si 16M",
     "detector_serial_number": "E-32-0117",
@@ -57,7 +57,7 @@ BASIC_START_MESSAGE = {
         0.1622715786431361,
         -0.23715919962215962,
     ],
-    "flatfield": {"threshold_1": b'\x00\x00\x00\x00'},
+    "flatfield": {"threshold_1": b"\x00\x00\x00\x00"},
     "flatfield_enabled": True,
     "frame_time": 0.004317572232502031,
     "goniometer": {
@@ -70,7 +70,7 @@ BASIC_START_MESSAGE = {
     "incident_energy": 13500.299829398293,
     "incident_wavelength": 0.918381073013,
     "number_of_images": 1,
-    "pixel_mask": {"threshold_1": b'\x00\x00\x00\x00'},
+    "pixel_mask": {"threshold_1": b"\x00\x00\x00\x00"},
     "pixel_mask_enabled": True,
     "pixel_size_x": 7.5e-05,
     "pixel_size_y": 7.5e-05,
@@ -121,7 +121,9 @@ def test_begin_series_message_basic(stream: EigerStream2, header_detail: str) ->
     settings = EigerSettings()
 
     stream.begin_series(settings, TEST_SERIES_ID, header_detail)
-    message = cbor2.loads(list(stream.consume_data())[0])
+    data = list(stream.consume_data())[0]
+    assert isinstance(data, bytes)
+    message = cbor2.loads(data)
     for axis, start_value in BASIC_START_MESSAGE["goniometer"].items():
         assert start_value == message["goniometer"][axis]
     message.pop("goniometer")
@@ -130,10 +132,7 @@ def test_begin_series_message_basic(stream: EigerStream2, header_detail: str) ->
     for f in ALL_FIELDS:
         reduced_start_message.pop(f)
     assert message == reduced_start_message
-    assert not any(
-        f in message
-        for f in ALL_FIELDS
-    )
+    assert not any(f in message for f in ALL_FIELDS)
 
 
 def test_begin_series_message_all(stream: EigerStream2) -> None:
@@ -142,7 +141,9 @@ def test_begin_series_message_all(stream: EigerStream2) -> None:
 
     stream.begin_series(settings, TEST_SERIES_ID, "all")
     # actually the line above hangs now
-    message = cbor2.loads(list(stream.consume_data())[0])
+    data = list(stream.consume_data())[0]
+    assert isinstance(data, bytes)
+    message = cbor2.loads(data)
     for axis, start_value in BASIC_START_MESSAGE["goniometer"].items():
         assert start_value == message["goniometer"][axis]
     message.pop("goniometer")
@@ -161,7 +162,9 @@ def test_insert_image_produces_correct_message(stream: EigerStream2) -> None:
         image = Image.create_dummy_image(i, (X_SIZE, Y_SIZE))
 
         stream.insert_image(image, TEST_SERIES_ID)
-        message = cbor2.loads(list(stream.consume_data())[0])
+        data = list(stream.consume_data())[0]
+        assert isinstance(data, bytes)
+        message = cbor2.loads(data)
 
         # Image data is too big to compare - just sanity check size
         assert message["data"]["threshold_1"].value[0] == [Y_SIZE, X_SIZE]
@@ -176,7 +179,9 @@ def test_insert_image_produces_correct_message(stream: EigerStream2) -> None:
 
 def test_end_series_produces_correct_message(stream: EigerStream2) -> None:
     stream.end_series(TEST_SERIES_ID)
-    message = cbor2.loads(list(stream.consume_data())[0])
+    data = list(stream.consume_data())[0]
+    assert isinstance(data, bytes)
+    message = cbor2.loads(data)
 
     assert message == END_MESSAGE
 
@@ -191,6 +196,10 @@ def test_data_buffered(stream: EigerStream2) -> None:
     stream.insert_image(image, TEST_SERIES_ID)
     stream.end_series(TEST_SERIES_ID)
 
-    messages = list(cbor2.loads(b) for b in stream.consume_data())
+    data = list(stream.consume_data())
+    messages: List[Any] = []
+    for datum in data:
+        assert isinstance(datum, bytes)
+        messages.append(cbor2.loads(datum))
 
     assert [m["type"] for m in messages] == ["start", "image", "image", "image", "end"]

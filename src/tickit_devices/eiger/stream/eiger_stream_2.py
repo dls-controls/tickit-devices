@@ -1,9 +1,9 @@
+import base64
 import logging
 from pathlib import Path
 from queue import Queue
-from typing import Any, Dict, Iterable, Mapping, TypedDict, Union
+from typing import Any, Dict, Iterable, Mapping, Union
 
-import base64
 import cbor2
 import numpy as np
 from pydantic.v1 import BaseModel
@@ -12,7 +12,6 @@ from typing_extensions import TypedDict
 
 from tickit_devices.eiger.data.dummy_image import Image
 from tickit_devices.eiger.eiger_settings import EigerSettings
-
 from tickit_devices.eiger.stream.stream2 import stream2_tag_decoder
 
 LOGGER = logging.getLogger(__name__)
@@ -25,7 +24,7 @@ STREAM_SETTINGS_MAP = dict(
     frame_time="frame_time",
     sensor_material="sensor_material",
     sensor_thickness="sensor_thickness",
-    # threshold_energy="threshold_energy",  # This is broken because it is now a map of thresholds
+    # threshold_energy="threshold_energy",  # broken as it is now a map of thresholds
     # Indirect Mappings
     countrate_correction_enabled="countrate_correction_applied",
     detector_description="description",
@@ -80,12 +79,8 @@ class EigerStream2:
     class Inputs(TypedDict):
         """No inputs."""
 
-        ...
-
     class Outputs(TypedDict):
         """No outputs."""
-
-        ...
 
     def __init__(self, callback_period: int = int(1e9)) -> None:
         """Eiger Stream2 constructor."""

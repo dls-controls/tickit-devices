@@ -1,6 +1,6 @@
 import logging
 from queue import Queue
-from typing import Any, Iterable, Mapping, TypedDict, Union
+from typing import Any, Iterable, Mapping, Union
 
 from pydantic.v1 import BaseModel
 from tickit.core.typedefs import SimTime
@@ -14,14 +14,13 @@ from tickit_devices.eiger.data.schema import (
     ImageCharacteristicsHeader,
     ImageConfigHeader,
     ImageHeader,
-) 
+)
 from tickit_devices.eiger.eiger_settings import EigerSettings
 
 LOGGER = logging.getLogger(__name__)
 
 
 _Message = Union[BaseModel, Mapping[str, Any], bytes]
-
 
 
 class EigerStream:
@@ -32,10 +31,10 @@ class EigerStream:
     _message_buffer: Queue[_Message]
 
     class Inputs(TypedDict):
-        ...
+        """No inputs."""
 
     class Outputs(TypedDict):
-        ...
+        """No outputs."""
 
     def __init__(self, callback_period: int = int(1e9)) -> None:
         """An Eiger Stream constructor."""

@@ -127,10 +127,6 @@ class EigerSettings:
         default="normal", metadata=rw_str(allowed_values=["normal", "retrigger"])
     )
     count_time: float = field(default=0.1, metadata=rw_float())
-    counting_mode: str = field(
-        default="normal",
-        metadata=rw_str(allowed_values=["normal", "retrigger"]),
-    )
     countrate_correction_applied: bool = field(default=True, metadata=rw_bool())
     countrate_correction_count_cutoff: int = field(default=1000, metadata=rw_int())
     data_collection_date: str = field(
