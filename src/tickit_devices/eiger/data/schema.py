@@ -67,7 +67,7 @@ class ImageConfigHeader(BaseModel):
     Describes the metrics on the image acquisition.
     """
 
-    real_time: float
-    start_time: float
-    stop_time: float
+    real_time: int
+    start_time: int
+    stop_time: int
     htype: str = "dconfig-1.0"

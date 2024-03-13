@@ -117,9 +117,9 @@ class EigerStream:
             type=image.dtype,
         )
         config_header = ImageConfigHeader(
-            real_time=0.0,
-            start_time=0.0,
-            stop_time=0.0,
+            real_time=0,
+            start_time=0,
+            stop_time=0,
         )
 
         self._buffer(header)
