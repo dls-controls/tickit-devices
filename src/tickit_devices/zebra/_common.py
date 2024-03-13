@@ -234,8 +234,7 @@ class Block(Device, ABC, Generic[Inputs, Outputs]):
             return DeviceUpdate(self.previous_outputs, call_at=SimTime(time + 20))
 
     @abstractmethod
-    def _get_next_outputs(self, inputs: Inputs) -> Outputs:
-        ...
+    def _get_next_outputs(self, inputs: Inputs) -> Outputs: ...
 
     @property
     def num(self):

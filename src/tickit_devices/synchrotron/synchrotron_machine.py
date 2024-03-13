@@ -21,8 +21,7 @@ class SynchrotronMachineStatusDevice(Device):
     The signal is read via an epics adapter, and set using a tcp adapter.
     """
 
-    class Inputs(TypedDict):
-        ...
+    class Inputs(TypedDict): ...
 
     class Outputs(TypedDict):
         mode: int

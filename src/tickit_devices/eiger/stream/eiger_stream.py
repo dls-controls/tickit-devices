@@ -34,11 +34,9 @@ class EigerStream:
 
     _message_buffer: Queue[_Message]
 
-    class Inputs(TypedDict):
-        ...
+    class Inputs(TypedDict): ...
 
-    class Outputs(TypedDict):
-        ...
+    class Outputs(TypedDict): ...
 
     def __init__(self, callback_period: int = int(1e9)) -> None:
         """An Eiger Stream constructor."""

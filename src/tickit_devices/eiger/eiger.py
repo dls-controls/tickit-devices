@@ -44,8 +44,7 @@ class EigerDevice(Device):
     class Inputs(TypedDict, total=False):
         trigger: bool
 
-    class Outputs(TypedDict):
-        ...
+    class Outputs(TypedDict): ...
 
     def __init__(
         self,
